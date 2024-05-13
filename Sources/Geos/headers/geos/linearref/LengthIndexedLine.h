@@ -41,7 +41,7 @@ namespace linearref   // geos::linearref
  * themselves) are supported.
  */
 
-class _export LengthIndexedLine
+class LengthIndexedLine
 {
 private:
 	const geom::Geometry *linearGeom;

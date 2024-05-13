@@ -32,7 +32,7 @@ namespace geos {
 namespace geos {
 namespace algorithm { // geos::algorithm
 
-class _export CentroidLine {
+class GEOS_DLL CentroidLine {
 private:
 
 	geom::Coordinate centSum;

@@ -51,13 +51,13 @@ public:
 
 	friend class GeometryFactory;
 
-	_export virtual ~MultiPolygon();
+	virtual ~MultiPolygon();
 
 	/// Returns surface dimension (2)
-	_export Dimension::DimensionType getDimension() const;
+	Dimension::DimensionType getDimension() const;
 
 	/// Returns 1 (MultiPolygon boundary is MultiLineString)
-	_export int getBoundaryDimension() const;
+	int getBoundaryDimension() const;
 
 	/** \brief
 	 * Computes the boundary of this geometry
@@ -65,17 +65,17 @@ public:
 	 * @return a lineal geometry (which may be empty)
 	 * @see Geometry#getBoundary
 	 */
-	_export Geometry* getBoundary() const;
+	Geometry* getBoundary() const;
 
-	_export std::string getGeometryType() const;
+	std::string getGeometryType() const;
 
-	_export virtual GeometryTypeId getGeometryTypeId() const;
+	virtual GeometryTypeId getGeometryTypeId() const;
 
-	_export bool isSimple() const;
+	bool isSimple() const;
 
-	_export bool equalsExact(const Geometry *other, double tolerance=0) const;
+	bool equalsExact(const Geometry *other, double tolerance=0) const;
 
-	_export Geometry *clone() const;
+	Geometry *clone() const;
 
 protected:
 
@@ -100,9 +100,9 @@ protected:
 	 *	Caller must keep the factory alive for the life-time
 	 *	of the constructed MultiPolygon.
 	 */
-	_export MultiPolygon(std::vector<Geometry *> *newPolys, const GeometryFactory *newFactory);
+	MultiPolygon(std::vector<Geometry *> *newPolys, const GeometryFactory *newFactory);
 
-	_export MultiPolygon(const MultiPolygon &mp);
+	MultiPolygon(const MultiPolygon &mp);
 
 
 };

@@ -159,7 +159,7 @@ enum GeometryTypeId {
  *  remain distinct. This behaviour is desired in many cases.
  *
  */
-class Geometry {
+class GEOS_DLL Geometry {
 
 public:
 
@@ -190,7 +190,7 @@ public:
 	 *
 	 * @return the factory for this geometry
 	 */
-	_export const GeometryFactory* getFactory() const { return factory; }
+	const GeometryFactory* getFactory() const { return factory; }
 
 	/**
 	* \brief
@@ -205,7 +205,7 @@ public:
 	* @param newUserData an object, the semantics for which are
 	* defined by the application using this Geometry
 	*/
-	_export void setUserData(void* newUserData) { userData=newUserData; }
+	void setUserData(void* newUserData) { userData=newUserData; }
 
 	/**
 	* \brief
@@ -213,7 +213,7 @@ public:
 	*
 	* @return the user data object, or <code>null</code> if none set
 	*/
-	_export void* getUserData() { return userData; }
+	void* getUserData() { return userData; }
 
 	/*
 	 * \brief
@@ -230,52 +230,52 @@ public:
 	 * <code>Geometry</code> is defined.
 	 *
 	 */
-	_export virtual int getSRID() const { return SRID; }
+	virtual int getSRID() const { return SRID; }
 
 	/*
 	 * Sets the ID of the Spatial Reference System used by the
 	 * <code>Geometry</code>.
 	 */
-	_export virtual void setSRID(int newSRID) { SRID=newSRID; }
+	virtual void setSRID(int newSRID) { SRID=newSRID; }
 
 	/**
 	 * \brief
 	 * Get the PrecisionModel used to create this Geometry.
 	 */
-	_export const PrecisionModel* getPrecisionModel() const;
+	const PrecisionModel* getPrecisionModel() const;
 
 	/// \brief
 	/// Returns a vertex of this Geometry,
 	/// or NULL if this is the empty geometry
 	///
-	_export virtual const Coordinate* getCoordinate() const=0; //Abstract
+	virtual const Coordinate* getCoordinate() const=0; //Abstract
 
 	/**
 	 * \brief
 	 * Returns this Geometry vertices.
 	 * Caller takes ownership of the returned object.
 	 */
-	_export virtual CoordinateSequence* getCoordinates() const=0; //Abstract
+	virtual CoordinateSequence* getCoordinates() const=0; //Abstract
 
 	/// Returns the count of this Geometrys vertices.
-	_export virtual size_t getNumPoints() const=0; //Abstract
+	virtual size_t getNumPoints() const=0; //Abstract
 
 	/// Returns false if the Geometry not simple.
-	_export virtual bool isSimple() const; 
+	virtual bool isSimple() const; 
 
 	/// Return a string representation of this Geometry type
-	_export virtual std::string getGeometryType() const=0; //Abstract
+	virtual std::string getGeometryType() const=0; //Abstract
 
 	/// Return an integer representation of this Geometry type
-	_export virtual GeometryTypeId getGeometryTypeId() const=0; //Abstract
+	virtual GeometryTypeId getGeometryTypeId() const=0; //Abstract
 
 	/// Returns the number of geometries in this collection
 	/// (or 1 if this is not a collection)
-	_export virtual size_t getNumGeometries() const { return 1; }
+	virtual size_t getNumGeometries() const { return 1; }
 
 	/// Returns a pointer to the nth Geometry int this collection
 	/// (or self if this is not a collection)
-	_export virtual const Geometry* getGeometryN(size_t /*n*/) const { return this; }
+	virtual const Geometry* getGeometryN(size_t /*n*/) const { return this; }
 
 	/**
 	 * \brief Tests the validity of this <code>Geometry</code>.
@@ -286,16 +286,16 @@ public:
 	 *
 	 * @see IsValidOp
 	 */
-	_export virtual bool isValid() const;
+	virtual bool isValid() const;
 
 	/// Returns whether or not the set of points in this Geometry is empty.
-	_export virtual bool isEmpty() const=0; //Abstract
+	virtual bool isEmpty() const=0; //Abstract
 
 	/// Polygon overrides to check for actual rectangle
-	_export virtual bool isRectangle() const { return false; }
+	virtual bool isRectangle() const { return false; }
 
 	/// Returns the dimension of this Geometry (0=point, 1=line, 2=surface)
-	_export virtual Dimension::DimensionType getDimension() const=0; //Abstract
+	virtual Dimension::DimensionType getDimension() const=0; //Abstract
 
 	/**
 	 * \brief
@@ -313,19 +313,19 @@ public:
 	 *          of this <code>Geometry</code>.
 	 *          Ownershipof the returned object transferred to caller.
 	 */
-	_export virtual Geometry* getBoundary() const=0; //Abstract
+	virtual Geometry* getBoundary() const=0; //Abstract
 
 	/// Returns the dimension of this Geometrys inherent boundary.
-	_export virtual int getBoundaryDimension() const=0; //Abstract
+	virtual int getBoundaryDimension() const=0; //Abstract
 
 	/// Returns this Geometrys bounding box.
-	_export virtual Geometry* getEnvelope() const;
+	virtual Geometry* getEnvelope() const;
 
 	/** \brief
 	 * Returns the minimum and maximum x and y values in this Geometry,
 	 * or a null Envelope if this Geometry is empty.
 	 */
-	_export virtual const Envelope* getEnvelopeInternal() const;
+	virtual const Envelope* getEnvelopeInternal() const;
 
 	/**
 	 * Tests whether this geometry is disjoint from the specified geometry.
@@ -343,16 +343,16 @@ public:
 	 *
 	 * @see Geometry::intersects
 	 */
-	_export virtual bool disjoint(const Geometry *other) const;
+	virtual bool disjoint(const Geometry *other) const;
 
 	/** \brief
 	 * Returns true if the DE-9IM intersection matrix for the two
 	 * Geometrys is FT*******, F**T***** or F***T****.
 	 */
-	_export virtual bool touches(const Geometry *other) const;
+	virtual bool touches(const Geometry *other) const;
 
 	/// Returns true if disjoint returns false.
-	_export virtual bool intersects(const Geometry *g) const;
+	virtual bool intersects(const Geometry *g) const;
 
 	/**
 	 * Tests whether this geometry crosses the specified geometry.
@@ -376,23 +376,23 @@ public:
 	 *            <code>Geometry</code>
 	 *@return  <code>true</code> if the two <code>Geometry</code>s cross.
 	 */
-	_export virtual bool crosses(const Geometry *g) const;
+	virtual bool crosses(const Geometry *g) const;
 
 	/** \brief
 	 * Returns true if the DE-9IM intersection matrix for the two
 	 * Geometrys is T*F**F***.
 	 */
-	_export virtual bool within(const Geometry *g) const;
+	virtual bool within(const Geometry *g) const;
 
 	/// Returns true if other.within(this) returns true.
-	_export virtual bool contains(const Geometry *g) const;
+	virtual bool contains(const Geometry *g) const;
 
 	/** \brief
 	 * Returns true if the DE-9IM intersection matrix for the two
 	 * Geometrys is T*T***T** (for two points or two surfaces)
 	 * 1*T***T** (for two curves).
 	 */
-	_export virtual bool overlaps(const Geometry *g) const;
+	virtual bool overlaps(const Geometry *g) const;
 
 	/**
 	 * \brief
@@ -408,7 +408,7 @@ public:
 	 * @throws util::IllegalArgumentException if either arg is a collection
 	 *
 	 */
-	_export virtual bool relate(const Geometry *g,
+	virtual bool relate(const Geometry *g,
 			const std::string& intersectionPattern) const;
 
 	bool relate(const Geometry& g, const std::string& intersectionPattern) const
@@ -417,7 +417,7 @@ public:
 	}
 
 	/// Returns the DE-9IM intersection matrix for the two Geometrys.
-	_export virtual IntersectionMatrix* relate(const Geometry *g) const;
+	virtual IntersectionMatrix* relate(const Geometry *g) const;
 	IntersectionMatrix* relate(const Geometry &g) const {
 		return relate(&g);
 	}
@@ -427,7 +427,7 @@ public:
 	 * Returns true if the DE-9IM intersection matrix for the two
 	 * Geometrys is T*F**FFF*.
 	 */
-	_export virtual bool equals(const Geometry *g) const;
+	virtual bool equals(const Geometry *g) const;
 
 	/** \brief
 	 * Returns <code>true</code> if this geometry covers the
@@ -467,7 +467,7 @@ public:
 	 * @see Geometry::contains
 	 * @see Geometry::coveredBy
 	 */
-	_export bool covers(const Geometry* g) const;
+	bool covers(const Geometry* g) const;
 
 	/** \brief
 	 * Tests whether this geometry is covered by the
@@ -505,15 +505,15 @@ public:
 
 
 	/// Returns the Well-known Text representation of this Geometry.
-	_export virtual std::string toString() const;
+	virtual std::string toString() const;
 
-	_export virtual std::string toText() const;
+	virtual std::string toText() const;
 	
 	/// Returns a buffer region around this Geometry having the given width.
 	//
 	/// @throws util::TopologyException if a robustness error occurs
 	///
-	_export virtual Geometry* buffer(double distance) const;
+	virtual Geometry* buffer(double distance) const;
 
 	/// \brief
 	/// Returns a buffer region around this Geometry having the
@@ -522,7 +522,7 @@ public:
 	//
 	/// @throws util::TopologyException if a robustness error occurs
 	///
-	_export virtual Geometry* buffer(double distance,int quadrantSegments) const;
+	virtual Geometry* buffer(double distance,int quadrantSegments) const;
 
 	/** \brief
 	 * Computes a buffer area around this geometry having the given
@@ -560,13 +560,13 @@ public:
 	 *
 	 * @see BufferOp
 	 */
-	_export virtual Geometry* buffer(double distance, int quadrantSegments,
+	virtual Geometry* buffer(double distance, int quadrantSegments,
 			int endCapStyle) const;
 
 	/// \brief
 	/// Returns the smallest convex Polygon that contains
 	/// all the points in the Geometry.
-	_export virtual Geometry* convexHull() const;
+	virtual Geometry* convexHull() const;
 
 	/** \brief
 	 * Returns a Geometry representing the points shared by
@@ -577,7 +577,7 @@ public:
 	 *         non-empty GeometryCollection
 	 *
 	 */
-	_export virtual Geometry* intersection(const Geometry *other) const;
+	virtual Geometry* intersection(const Geometry *other) const;
 
 	/** \brief
 	 * Returns a Geometry representing all the points in this Geometry
@@ -588,7 +588,7 @@ public:
 	 *         non-empty GeometryCollection
 	 *
 	 */
-	_export virtual Geometry* Union(const Geometry *other) const;
+	virtual Geometry* Union(const Geometry *other) const;
 		// throw(IllegalArgumentException *, TopologyException *);
 
 	/**
@@ -601,7 +601,7 @@ public:
 	 *         non-empty GeometryCollection
 	 *
 	 */
-	_export virtual Geometry* difference(const Geometry *other) const;
+	virtual Geometry* difference(const Geometry *other) const;
 
 	/** \brief
 	 * Returns a set combining the points in this Geometry not in other,
@@ -612,7 +612,7 @@ public:
 	 *         non-empty GeometryCollection
 	 *
 	 */
-	_export virtual Geometry* symDifference(const Geometry *other) const;
+	virtual Geometry* symDifference(const Geometry *other) const;
 
 	/** \brief
 	 * Returns true if the two Geometrys are exactly equal,
@@ -623,10 +623,10 @@ public:
 
 	virtual void apply_rw(const CoordinateFilter *filter)=0; //Abstract
 	virtual void apply_ro(CoordinateFilter *filter) const=0; //Abstract
-	_export virtual void apply_rw(GeometryFilter *filter);
-	_export virtual void apply_ro(GeometryFilter *filter) const;
-	_export virtual void apply_rw(GeometryComponentFilter *filter);
-	_export virtual void apply_ro(GeometryComponentFilter *filter) const;
+	virtual void apply_rw(GeometryFilter *filter);
+	virtual void apply_ro(GeometryFilter *filter) const;
+	virtual void apply_rw(GeometryComponentFilter *filter);
+	virtual void apply_ro(GeometryComponentFilter *filter) const;
 
 	/**
 	 *  Performs an operation on the coordinates in this Geometry's
@@ -636,7 +636,7 @@ public:
 	 *
 	 * @param  filter  the filter to apply
 	 */
-	_export virtual void apply_rw(CoordinateSequenceFilter& filter)=0;
+	virtual void apply_rw(CoordinateSequenceFilter& filter)=0;
 
 	/**
 	 *  Performs a read-only operation on the coordinates in this
@@ -644,7 +644,7 @@ public:
 	 *
 	 * @param  filter  the filter to apply
 	 */
-	_export virtual void apply_ro(CoordinateSequenceFilter& filter) const=0;
+	virtual void apply_ro(CoordinateSequenceFilter& filter) const=0;
 
 	/** \brief
 	 * Apply a fiter to each component of this geometry.
@@ -665,25 +665,25 @@ public:
 	/// Converts this Geometry to normal form (or  canonical form).
 	virtual void normalize()=0; //Abstract
 
-	_export virtual int compareTo(const Geometry *geom) const;
+	virtual int compareTo(const Geometry *geom) const;
 
 	/** \brief
 	 * Returns the minimum distance between this Geometry
 	 * and the Geometry g
 	 */
-	_export virtual double distance(const Geometry *g) const;
+	virtual double distance(const Geometry *g) const;
 
 	/// Returns the area of this Geometry.
-	_export virtual double getArea() const;
+	virtual double getArea() const;
 
 	/// Returns the length of this Geometry.
-	_export virtual double getLength() const;
+	virtual double getLength() const;
 
 	/** \brief
 	 * Tests whether the distance from this Geometry  to another
 	 * is less than or equal to a specified value.
 	 */
-	_export virtual bool isWithinDistance(const Geometry *geom,double cDistance);
+	virtual bool isWithinDistance(const Geometry *geom,double cDistance);
 
 	/** \brief
 	 * Computes the centroid of this <code>Geometry</code>.
@@ -694,13 +694,13 @@ public:
 	 *
 	 * @return a {@link Point} which is the centroid of this Geometry
 	 */
-	_export virtual Point* getCentroid() const;
+	virtual Point* getCentroid() const;
 
 	/// Computes the centroid of this Geometry as a Coordinate
 	//
 	/// Returns false if centroid cannot be computed (EMPTY geometry)
 	///
-	_export virtual bool getCentroid(Coordinate& ret) const;
+	virtual bool getCentroid(Coordinate& ret) const;
 
 	/** \brief
 	 * Computes an interior point of this <code>Geometry</code>.
@@ -712,21 +712,21 @@ public:
 	 * @return a Point which is in the interior of this Geometry, or
 	 *         null if the geometry doesn't have an interior (empty)
 	 */
-	_export virtual Point* getInteriorPoint() const;
+	virtual Point* getInteriorPoint() const;
 
 	/*
 	 * \brief
 	 * Notifies this Geometry that its Coordinates have been changed
 	 * by an external party (using a CoordinateFilter, for example).
 	 */
-	_export virtual void geometryChanged();
+	virtual void geometryChanged();
 
 	/**
 	 * \brief
 	 * Notifies this Geometry that its Coordinates have been changed
 	 * by an external party.
 	 */
-	_export void geometryChangedAction();
+	void geometryChangedAction();
 
 protected:
 
@@ -751,7 +751,7 @@ protected:
 	 * Returns whether the two Geometrys are equal, from the point
 	 * of view of the equalsExact method.
 	 */
-	_export virtual bool isEquivalentClass(const Geometry *other) const;
+	virtual bool isEquivalentClass(const Geometry *other) const;
 
 	static void checkNotGeometryCollection(const Geometry *g);
 			// throw(IllegalArgumentException *);
@@ -794,8 +794,6 @@ protected:
 	 */
 	Geometry(const GeometryFactory *factory);
 
-	const GeometryFactory *factory;
-
 private:
 
 
@@ -817,7 +815,7 @@ private:
 	//
 	/// Externally owned
 	///
-
+	const GeometryFactory *factory;
 
 	static const GeometryFactory* INTERNAL_GEOMETRY_FACTORY;
 

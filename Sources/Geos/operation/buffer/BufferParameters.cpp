@@ -32,6 +32,8 @@ namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
 // public static const
+const double BufferParameters::DEFAULT_MITRE_LIMIT = 5.0;
+
 // public
 BufferParameters::BufferParameters(int quadrantSegments)
 	:

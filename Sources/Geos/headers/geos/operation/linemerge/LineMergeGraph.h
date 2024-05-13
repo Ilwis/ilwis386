@@ -51,7 +51,7 @@ namespace linemerge { // geos::operation::linemerge
  * and planargraph::Node indicates whether they have been
  * logically deleted from the graph.
  */
-class _export LineMergeGraph: public planargraph::PlanarGraph {
+class GEOS_DLL LineMergeGraph: public planargraph::PlanarGraph {
 
 private:
 

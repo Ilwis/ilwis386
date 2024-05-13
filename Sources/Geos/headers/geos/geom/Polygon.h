@@ -71,7 +71,7 @@ public:
 	/// A vector of const Polygon pointers
 	typedef std::vector<const Polygon *> ConstVect;
 
-	_export virtual ~Polygon();
+	virtual ~Polygon();
 
 	/**
 	 * Creates and returns a full copy of this {@link Polygon} object.
@@ -79,17 +79,17 @@ public:
 	 *
 	 * @return a clone of this instance
 	 */
-	_export virtual Geometry *clone() const { return new Polygon(*this); }
+	virtual Geometry *clone() const { return new Polygon(*this); }
 
-	_export CoordinateSequence* getCoordinates() const;
+	CoordinateSequence* getCoordinates() const;
 
-	_export size_t getNumPoints() const;
+	size_t getNumPoints() const;
 
 	/// Returns surface dimension (2)
-	_export Dimension::DimensionType getDimension() const;
+	Dimension::DimensionType getDimension() const;
 
 	/// Returns 1 (Polygon boundary is a MultiLineString)
-	_export int getBoundaryDimension() const;
+	int getBoundaryDimension() const;
 
 	/** \brief
 	 * Computes the boundary of this geometry
@@ -97,9 +97,9 @@ public:
 	 * @return a lineal geometry (which may be empty)
 	 * @see Geometry#getBoundary
 	 */
-	_export Geometry* getBoundary() const;
+	Geometry* getBoundary() const;
 
-	_export bool isEmpty() const;
+	bool isEmpty() const;
 
 	/** \brief
 	 * Tests if a valid polygon is simple.
@@ -107,50 +107,50 @@ public:
 	 *
 	 * @return <code>true</code>
 	 */
-	_export bool isSimple() const;
+	bool isSimple() const;
 	
 	/// Returns the exterior ring (shell)
-	_export const LineString* getExteriorRing() const;
+	const LineString* getExteriorRing() const;
 
 	/// Returns number of interior rings (hole)
-	_export size_t getNumInteriorRing() const;
+	size_t getNumInteriorRing() const;
 
 	/// Get nth interior ring (hole)
-	_export const LineString* getInteriorRingN(size_t n) const;
+	const LineString* getInteriorRingN(size_t n) const;
 
-	_export std::string getGeometryType() const;
-	_export virtual GeometryTypeId getGeometryTypeId() const;
-	_export bool equalsExact(const Geometry *other, double tolerance=0) const;
-	_export void apply_rw(const CoordinateFilter *filter);
-	_export void apply_ro(CoordinateFilter *filter) const;
-	_export void apply_rw(GeometryFilter *filter);
-	_export void apply_ro(GeometryFilter *filter) const;
-	_export void apply_rw(CoordinateSequenceFilter& filter);
-	_export void apply_ro(CoordinateSequenceFilter& filter) const;
+	std::string getGeometryType() const;
+	virtual GeometryTypeId getGeometryTypeId() const;
+	bool equalsExact(const Geometry *other, double tolerance=0) const;
+	void apply_rw(const CoordinateFilter *filter);
+	void apply_ro(CoordinateFilter *filter) const;
+	void apply_rw(GeometryFilter *filter);
+	void apply_ro(GeometryFilter *filter) const;
+	void apply_rw(CoordinateSequenceFilter& filter);
+	void apply_ro(CoordinateSequenceFilter& filter) const;
 
-	_export Geometry* convexHull() const;
+	Geometry* convexHull() const;
 
-	_export void normalize();
+	void normalize();
 
-	_export int compareToSameClass(const Geometry *p) const; //was protected
+	int compareToSameClass(const Geometry *p) const; //was protected
 
-	_export const Coordinate* getCoordinate() const;
+	const Coordinate* getCoordinate() const;
 
-	_export double getArea() const;
+	double getArea() const;
 
  	/// Returns the perimeter of this <code>Polygon</code>
-	_export double getLength() const;
+	double getLength() const;
 
-	_export void apply_rw(GeometryComponentFilter *filter);
+	void apply_rw(GeometryComponentFilter *filter);
 
-	_export void apply_ro(GeometryComponentFilter *filter) const;
+	void apply_ro(GeometryComponentFilter *filter) const;
 
-	_export bool isRectangle() const;
+	bool isRectangle() const;
 
 protected:
 
 
-	_export Polygon(const Polygon &p);
+	Polygon(const Polygon &p);
 
 	/**
 	 * Constructs a <code>Polygon</code> with the given exterior 
@@ -170,18 +170,18 @@ protected:
 	 *
 	 * Polygon will take ownership of Shell and Holes LinearRings 
 	 */
-	_export Polygon(LinearRing *newShell, std::vector<Geometry *> *newHoles,
+	Polygon(LinearRing *newShell, std::vector<Geometry *> *newHoles,
 		const GeometryFactory *newFactory);
 
 	LinearRing *shell;
 
 	std::vector<Geometry *> *holes; //Actually vector<LinearRing *>
 
-	_export Envelope::AutoPtr computeEnvelopeInternal() const;
+	Envelope::AutoPtr computeEnvelopeInternal() const;
 
 private:
 
-	_export void normalize(LinearRing *ring, bool clockwise);
+	void normalize(LinearRing *ring, bool clockwise);
 };
 
 } // namespace geos::geom

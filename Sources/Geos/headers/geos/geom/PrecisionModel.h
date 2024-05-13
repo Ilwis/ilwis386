@@ -20,7 +20,6 @@
 #ifndef GEOS_GEOM_PRECISIONMODEL_H
 #define GEOS_GEOM_PRECISIONMODEL_H
 
-#include <geos/platform.h> 
 #include <geos/export.h>
 #include <geos/inline.h>
 
@@ -81,7 +80,7 @@ namespace geom { // geos::geom
  *
  * JTS methods currently do not handle inputs with different precision models.
  */
-class _export PrecisionModel {
+class GEOS_DLL PrecisionModel {
 friend class io::Unload;
 
 public:

@@ -51,13 +51,13 @@ public:
 
 	friend class GeometryFactory;
 
-	_export virtual ~MultiPoint();
+	virtual ~MultiPoint();
 
 	/// Returns point dimension (0)
-	_export Dimension::DimensionType getDimension() const;
+	Dimension::DimensionType getDimension() const;
 
 	/// Returns Dimension::False (Point has no boundary)
-	_export int getBoundaryDimension() const;
+	int getBoundaryDimension() const;
 
 	/** \brief
 	 * Gets the boundary of this geometry.
@@ -68,17 +68,15 @@ public:
 	 * @return an empty GeometryCollection
 	 * @see Geometry#getBoundary
 	 */
-	_export Geometry* getBoundary() const;
+	Geometry* getBoundary() const;
 
-	_export std::string getGeometryType() const;
+	std::string getGeometryType() const;
 
-	_export virtual GeometryTypeId getGeometryTypeId() const;
+	virtual GeometryTypeId getGeometryTypeId() const;
 
-	_export bool equalsExact(const Geometry *other, double tolerance=0) const;
+	bool equalsExact(const Geometry *other, double tolerance=0) const;
 
-	_export Geometry *clone() const { return new MultiPoint(*this); };
-
-	_export bool isSimple() const { return Geometry::isSimple(); }
+	Geometry *clone() const { return new MultiPoint(*this); };
 
 protected:
 
@@ -100,11 +98,11 @@ protected:
 	 *	Caller must keep the factory alive for the life-time
 	 *	of the constructed MultiPoint.
 	 */
-	_export MultiPoint(std::vector<Geometry *> *newPoints, const GeometryFactory *newFactory);
+	MultiPoint(std::vector<Geometry *> *newPoints, const GeometryFactory *newFactory);
 
-	_export MultiPoint(const MultiPoint &mp): GeometryCollection(mp) {}
+	MultiPoint(const MultiPoint &mp): GeometryCollection(mp) {}
 
-	_export const Coordinate* getCoordinateN(int n) const;
+	const Coordinate* getCoordinateN(int n) const;
 };
 
 } // namespace geos::geom

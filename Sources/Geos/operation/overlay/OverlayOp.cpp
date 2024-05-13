@@ -397,7 +397,7 @@ OverlayOp::labelIncompleteNode(Node *n, int targetIndex)
 #if COMPUTE_Z
 	/*
 	 * If this node has been labeled INTERIOR of a line
-	 * or BOUNDARY of a geos::geom::Polygon we must merge
+	 * or BOUNDARY of a polygon we must merge
 	 * Z values of the intersected segment.
 	 * The intersection point has been already computed
 	 * by LineIntersector invoked by CGAlgorithms::isOnLine
@@ -408,7 +408,7 @@ OverlayOp::labelIncompleteNode(Node *n, int targetIndex)
 	{
 		mergeZ(n, line);
 	}
-	const geos::geom::Polygon *poly = dynamic_cast<const geos::geom::Polygon *>(targetGeom);
+	const Polygon *poly = dynamic_cast<const Polygon *>(targetGeom);
 	if ( loc == Location::BOUNDARY && poly )
 	{
 		mergeZ(n, poly);
@@ -424,7 +424,7 @@ OverlayOp::labelIncompleteNode(Node *n, int targetIndex)
 
 /*static private*/
 double
-OverlayOp::getAverageZ(const geos::geom::Polygon *poly)
+OverlayOp::getAverageZ(const Polygon *poly)
 {
 	double totz = 0.0;
 	int zcount = 0;
@@ -454,17 +454,17 @@ OverlayOp::getAverageZ(int targetIndex)
 
 	const Geometry *targetGeom = arg[targetIndex]->getGeometry();
 
-	// OverlayOp::getAverageZ(int) called with a ! geos::geom::Polygon
+	// OverlayOp::getAverageZ(int) called with a ! polygon
 	assert(targetGeom->getGeometryTypeId() == GEOS_POLYGON);
 
-	avgz[targetIndex] = getAverageZ((const geos::geom::Polygon *)targetGeom);
+	avgz[targetIndex] = getAverageZ((const Polygon *)targetGeom);
 	avgzcomputed[targetIndex] = true;
 	return avgz[targetIndex];
 }
 
 /*private*/
 int
-OverlayOp::mergeZ(Node *n, const geos::geom::Polygon *poly) const
+OverlayOp::mergeZ(Node *n, const Polygon *poly) const
 {
 	const LineString *ls;
 	int found = 0;
@@ -600,7 +600,7 @@ OverlayOp::isCovered(const Coordinate& coord,vector<LineString*> *geomList)
 
 /*private*/
 bool
-OverlayOp::isCovered(const Coordinate& coord,vector<geos::geom::Polygon*> *geomList)
+OverlayOp::isCovered(const Coordinate& coord,vector<Polygon*> *geomList)
 {
 	for(size_t i=0, n=geomList->size(); i<n; ++i)
 	{
@@ -615,7 +615,7 @@ OverlayOp::isCovered(const Coordinate& coord,vector<geos::geom::Polygon*> *geomL
 Geometry*
 OverlayOp::computeGeometry(vector<Point*> *nResultPointList,
                               vector<LineString*> *nResultLineList,
-                              vector<geos::geom::Polygon*> *nResultPolyList)
+                              vector<Polygon*> *nResultPolyList)
 {
 	size_t nPoints=nResultPointList->size();
 	size_t nLines=nResultLineList->size();
@@ -757,9 +757,9 @@ OverlayOp::computeOverlay(OverlayOp::OpCode opCode)
 
 	vector<Geometry*> *gv=polyBuilder.getPolygons();
 	size_t gvsize=gv->size();
-	resultPolyList=new vector<geos::geom::Polygon*>(gvsize);
+	resultPolyList=new vector<Polygon*>(gvsize);
 	for(size_t i=0; i<gvsize; ++i) {
-		(*resultPolyList)[i]=(geos::geom::Polygon*)(*gv)[i];
+		(*resultPolyList)[i]=(Polygon*)(*gv)[i];
 	}
 	delete gv;
 
@@ -1038,7 +1038,7 @@ OverlayOp::checkObviouslyWrongResult(OverlayOp::OpCode opCode)
  * unsigned int => size_t
  *
  * Revision 1.72  2006/06/09 07:42:13  strk
- * * source/geomgraph/GeometryGraph.cpp, source/operation/buffer/OffsetCurveSetBuilder.cpp, source/operation/overlay/OverlayOp.cpp, source/operation/valid/RepeatedPointTester.cpp: Fixed warning after geos::geom::Polygon ring accessor methods changed to work with size_t. Small optimizations in loops.
+ * * source/geomgraph/GeometryGraph.cpp, source/operation/buffer/OffsetCurveSetBuilder.cpp, source/operation/overlay/OverlayOp.cpp, source/operation/valid/RepeatedPointTester.cpp: Fixed warning after Polygon ring accessor methods changed to work with size_t. Small optimizations in loops.
  *
  * Revision 1.71  2006/06/05 15:36:34  strk
  * Given OverlayOp funx code enum a name and renamed values to have a lowercase prefix. Drop all of noding headers from installed header set.

@@ -55,11 +55,11 @@ namespace geom { // geos::geom
  * If these conditions are not met, the constructors throw
  * an {@link IllegalArgumentException}
  */
-class LinearRing : public LineString {
+class GEOS_DLL LinearRing : public LineString {
 
 public:
 
-	_export LinearRing(const LinearRing &lr);
+	LinearRing(const LinearRing &lr);
 
 	/**
 	 * \brief Constructs a <code>LinearRing</code> with the given points.
@@ -73,16 +73,16 @@ public:
 	 * @param newFactory the GeometryFactory used to create this geometry
 	 *
 	 */
-	_export LinearRing(CoordinateSequence* points,
+	LinearRing(CoordinateSequence* points,
 			const GeometryFactory *newFactory);
 
 	/// Hopefully cleaner version of the above
-	_export LinearRing(CoordinateSequence::AutoPtr points,
+	LinearRing(CoordinateSequence::AutoPtr points,
 			const GeometryFactory *newFactory);
 
-	_export virtual Geometry *clone() const { return new LinearRing(*this); }
+	virtual Geometry *clone() const { return new LinearRing(*this); }
 
-	_export virtual ~LinearRing();
+	virtual ~LinearRing();
 
 	/** \brief
 	 * Returns <code>Dimension.FALSE</code>, since by definition
@@ -90,7 +90,7 @@ public:
 	 *
 	 * @return Dimension::False
 	 */
-	_export int getBoundaryDimension() const;
+	int getBoundaryDimension() const;
 
 	/** \brief
 	 * Returns <code>true</code>, since by definition LinearRings
@@ -100,15 +100,15 @@ public:
 	 *
 	 * @see Geometry::isSimple
 	 */
-	_export bool isSimple() const;
+	bool isSimple() const;
 
-	_export std::string getGeometryType() const;
+	std::string getGeometryType() const;
 
-	_export virtual GeometryTypeId getGeometryTypeId() const;
+	virtual GeometryTypeId getGeometryTypeId() const;
 
-	_export void setPoints(CoordinateSequence* cl);
+	void setPoints(CoordinateSequence* cl);
 
-  	_export Geometry* reverse() const;
+  	Geometry* reverse() const;
 
 private:
 

@@ -46,7 +46,7 @@ namespace algorithm { // geos::algorithm
  * Last port: algorithm/ConvexHull.java rev. 1.26 (JTS-1.7)
  *
  */
-class ConvexHull {
+class GEOS_DLL ConvexHull {
 private:
 	const geom::GeometryFactory *geomFactory;
 	geom::Coordinate::ConstVect inputPts;
@@ -145,10 +145,10 @@ public:
 	/**
 	 * Create a new convex hull construction for the input Geometry.
 	 */
-	_export ConvexHull(const geom::Geometry *newGeometry);
+	ConvexHull(const geom::Geometry *newGeometry);
 
 
-	_export ~ConvexHull();
+	~ConvexHull();
 
 	/**
 	 * Returns a Geometry that represents the convex hull of
@@ -162,7 +162,7 @@ public:
 	 *         a Polygon; 2 points, a LineString;
 	 *         1 point, a Point; 0 points, an empty GeometryCollection.
 	 */
-	_export geom::Geometry* getConvexHull();
+	geom::Geometry* getConvexHull();
 };
 
 } // namespace geos::algorithm

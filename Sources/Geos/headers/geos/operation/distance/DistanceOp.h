@@ -21,7 +21,7 @@
 #define GEOS_OP_DISTANCE_DISTANCEOP_H
 
 #include <geos/export.h>
-#include <geos/platform.h> 
+
 #include <geos/algorithm/PointLocator.h> // for composition
 
 #include <vector>
@@ -76,11 +76,11 @@ public:
 	 * @param g1 another {@link Geometry}
 	 * @return the distance between the geometries
 	 */
-	_export static double distance(const geom::Geometry& g0,
+	static double distance(const geom::Geometry& g0,
 	                       const geom::Geometry& g1);
 
 	/// @deprecated, use the version taking references
-	_export static double distance(const geom::Geometry *g0,
+	static double distance(const geom::Geometry *g0,
 	                        const geom::Geometry *g1);
 
 	/**
@@ -93,7 +93,7 @@ public:
 	 * @param distance the distance to test
 	 * @return true if g0.distance(g1) <= distance
 	 */
-	_export static bool isWithinDistance(const geom::Geometry& g0,
+	static bool isWithinDistance(const geom::Geometry& g0,
 	                             const geom::Geometry& g1,
 	                                            double distance);
 
@@ -109,7 +109,7 @@ public:
 	 *         A NULL return means one of the geometries is empty.
 	 *
 	 */
-	_export static geom::CoordinateSequence* nearestPoints(
+	static geom::CoordinateSequence* nearestPoints(
 	                                        const geom::Geometry *g0,
 	                                        const geom::Geometry *g1);
 
@@ -126,12 +126,12 @@ public:
 	 *
 	 * @deprecated renamed to nearestPoints
 	 */
-	_export static geom::CoordinateSequence* closestPoints(
+	static geom::CoordinateSequence* closestPoints(
 	                                        const geom::Geometry *g0,
 	                                        const geom::Geometry *g1);
 
 	/// @deprecated use the one taking references
-	_export DistanceOp(const geom::Geometry *g0, const geom::Geometry *g1);
+	DistanceOp(const geom::Geometry *g0, const geom::Geometry *g1);
 
 	/**
 	 * \brief
@@ -141,7 +141,7 @@ public:
 	 * @param g0 a Geometry
 	 * @param g1 a Geometry
 	 */
-	_export DistanceOp(const geom::Geometry& g0, const geom::Geometry& g1);
+	DistanceOp(const geom::Geometry& g0, const geom::Geometry& g1);
 
 	/**
 	 * \brief
@@ -153,17 +153,17 @@ public:
 	 * @param terminateDistance the distance on which to terminate
 	 *                          the search
 	 */
-	_export DistanceOp(const geom::Geometry& g0, const geom::Geometry& g1,
+	DistanceOp(const geom::Geometry& g0, const geom::Geometry& g1,
 	                                      double terminateDistance);
 
-	_export ~DistanceOp();
+	~DistanceOp();
 
 	/**
 	 * Report the distance between the closest points on the input geometries.
 	 *
 	 * @return the distance between the geometries
 	 */
-	_export double distance();
+	double distance();
 
 	/**
 	 * Report the coordinates of the closest points in the input geometries.
@@ -174,7 +174,7 @@ public:
 	 *
 	 * @deprecated renamed to nearestPoints
 	 */
-	_export geom::CoordinateSequence* closestPoints();
+	geom::CoordinateSequence* closestPoints();
 
 	/**
 	 * Report the coordinates of the nearest points in the input geometries.
@@ -184,7 +184,7 @@ public:
 	 *         as a newly allocated object (ownership to caller)
 	 *
 	 */
-	_export geom::CoordinateSequence* nearestPoints();
+	geom::CoordinateSequence* nearestPoints();
 
 private:
 

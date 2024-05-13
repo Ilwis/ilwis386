@@ -45,7 +45,7 @@ namespace distance { // geos::algorithm::distance
  *
  * Also computes two points which are separated by the distance.
  */
-class _export DistanceToPoint
+class DistanceToPoint
 {
 public:
 

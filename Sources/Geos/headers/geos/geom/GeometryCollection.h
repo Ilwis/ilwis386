@@ -63,9 +63,9 @@ public:
 
 	typedef std::vector<Geometry *>::iterator iterator;
 
-	_export const_iterator begin() const;
+	const_iterator begin() const;
 
-	_export const_iterator end() const;
+	const_iterator end() const;
 
 	/**
 	 * Creates and returns a full copy of this GeometryCollection object.
@@ -77,7 +77,7 @@ public:
 		return new GeometryCollection(*this);
 	}
 
-	_export virtual ~GeometryCollection();
+	virtual ~GeometryCollection();
 
 	/**
 	 * \brief
@@ -92,9 +92,9 @@ public:
 	 * @return the collected coordinates
 	 *
 	 */
-	_export virtual CoordinateSequence* getCoordinates() const;
+	virtual CoordinateSequence* getCoordinates() const;
 
-	_export virtual bool isEmpty() const;
+	virtual bool isEmpty() const;
 
 	/**
 	 * \brief
@@ -103,61 +103,61 @@ public:
 	 *
 	 * @see Dimension::DimensionType
 	 */
-	_export virtual Dimension::DimensionType getDimension() const;
+	virtual Dimension::DimensionType getDimension() const;
 
-	_export virtual Geometry* getBoundary() const;
+	virtual Geometry* getBoundary() const;
 
 	/**
 	 * \brief
 	 * Returns the maximum boundary dimension of geometries in
 	 * this collection.
 	 */
-	_export virtual int getBoundaryDimension() const;
+	virtual int getBoundaryDimension() const;
 
-	_export virtual size_t getNumPoints() const;
+	virtual size_t getNumPoints() const;
 
-	_export virtual std::string getGeometryType() const;
+	virtual std::string getGeometryType() const;
 
-	_export virtual GeometryTypeId getGeometryTypeId() const;
+	virtual GeometryTypeId getGeometryTypeId() const;
 
-	_export virtual bool equalsExact(const Geometry *other,
+	virtual bool equalsExact(const Geometry *other,
 			double tolerance=0) const;
 
-	_export virtual void apply_ro(CoordinateFilter *filter) const;
+	virtual void apply_ro(CoordinateFilter *filter) const;
 
-	_export virtual void apply_rw(const CoordinateFilter *filter);
+	virtual void apply_rw(const CoordinateFilter *filter);
 
-	_export virtual void apply_ro(GeometryFilter *filter) const;
+	virtual void apply_ro(GeometryFilter *filter) const;
 
-	_export virtual void apply_rw(GeometryFilter *filter);
+	virtual void apply_rw(GeometryFilter *filter);
 
-	_export virtual void apply_ro(GeometryComponentFilter *filter) const;
+	virtual void apply_ro(GeometryComponentFilter *filter) const;
 
-	_export virtual void apply_rw(GeometryComponentFilter *filter);
+	virtual void apply_rw(GeometryComponentFilter *filter);
 
-	_export virtual void apply_rw(CoordinateSequenceFilter& filter);
+	virtual void apply_rw(CoordinateSequenceFilter& filter);
 
-	_export virtual void apply_ro(CoordinateSequenceFilter& filter) const;
+	virtual void apply_ro(CoordinateSequenceFilter& filter) const;
 
-	_export virtual void normalize();
+	virtual void normalize();
 
-	_export virtual const Coordinate* getCoordinate() const;
+	virtual const Coordinate* getCoordinate() const;
 
 	/// Returns the total area of this collection
-	_export virtual double getArea() const;
+	virtual double getArea() const;
 
 	/// Returns the total length of this collection
-	_export virtual double getLength() const;
+	virtual double getLength() const;
 
 	/// Returns the number of geometries in this collection
-	_export virtual size_t getNumGeometries() const;
+	virtual size_t getNumGeometries() const;
 
 	/// Returns a pointer to the nth Geometry int this collection
-	_export virtual const Geometry* getGeometryN(size_t n) const;
+	virtual const Geometry* getGeometryN(size_t n) const;
 
 protected:
 
-	_export GeometryCollection(const GeometryCollection &gc);
+	GeometryCollection(const GeometryCollection &gc);
 
 	/** \brief
 	 * Construct a GeometryCollection with the given GeometryFactory.
@@ -183,14 +183,14 @@ protected:
 	 *
 	 * @param newFactory the GeometryFactory used to create this geometry
 	 */
-	_export GeometryCollection(std::vector<Geometry *> *newGeoms, const GeometryFactory *newFactory);
+	GeometryCollection(std::vector<Geometry *> *newGeoms, const GeometryFactory *newFactory);
 
 
 	std::vector<Geometry *>* geometries;
 
-	_export virtual Envelope::AutoPtr computeEnvelopeInternal() const;
+	virtual Envelope::AutoPtr computeEnvelopeInternal() const;
 
-	_export virtual int compareToSameClass(const Geometry *gc) const;
+	virtual int compareToSameClass(const Geometry *gc) const;
 
 };
 

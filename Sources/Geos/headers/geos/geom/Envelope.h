@@ -51,7 +51,7 @@ class Coordinate;
  * the supplies extent values are automatically sorted into the correct order.
  *
  */
-class _export Envelope {
+class GEOS_DLL Envelope {
 
 public:
 

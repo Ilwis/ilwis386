@@ -65,7 +65,7 @@ public:
 	/// A vector of const Point pointers
 	typedef std::vector<const Point *> ConstVect;
 
-	_export virtual ~Point();
+	virtual ~Point();
 
 	/**
 	 * Creates and returns a full copy of this {@link Point} object.
@@ -73,22 +73,22 @@ public:
 	 *
 	 * @return a clone of this instance
 	 */
-	_export Geometry *clone() const { return new Point(*this); }
+	Geometry *clone() const { return new Point(*this); }
 
-	_export CoordinateSequence* getCoordinates(void) const;
+	CoordinateSequence* getCoordinates(void) const;
 
-	_export const CoordinateSequence* getCoordinatesRO() const;
+	const CoordinateSequence* getCoordinatesRO() const;
 
-	_export size_t getNumPoints() const;
-	_export bool isEmpty() const;
-	_export bool isSimple() const;
+	size_t getNumPoints() const;
+	bool isEmpty() const;
+	bool isSimple() const;
 	//bool isValid() const;
 
 	/// Returns point dimension (0)
-	_export Dimension::DimensionType getDimension() const;
+	Dimension::DimensionType getDimension() const;
 
 	/// Returns Dimension::False (Point has no boundary)
-	_export int getBoundaryDimension() const;
+	int getBoundaryDimension() const;
 
 	/**
 	 * Gets the boundary of this geometry.
@@ -98,30 +98,30 @@ public:
 	 * @return an empty GeometryCollection
 	 * @see Geometry::getBoundary
 	 */
-	_export Geometry* getBoundary() const;
+	Geometry* getBoundary() const;
 
-	_export double getX() const;
-	_export double getY() const;
-	_export const Coordinate* getCoordinate() const;
-	_export std::string getGeometryType() const;
-	_export virtual GeometryTypeId getGeometryTypeId() const;
-	_export void apply_ro(CoordinateFilter *filter) const;
-	_export void apply_rw(const CoordinateFilter *filter);
-	_export void apply_ro(GeometryFilter *filter) const;
-	_export void apply_rw(GeometryFilter *filter);
-	_export void apply_rw(GeometryComponentFilter *filter);
-	_export void apply_ro(GeometryComponentFilter *filter) const;
-	_export void apply_rw(CoordinateSequenceFilter& filter);
-	_export void apply_ro(CoordinateSequenceFilter& filter) const;
+	double getX() const;
+	double getY() const;
+	const Coordinate* getCoordinate() const;
+	std::string getGeometryType() const;
+	virtual GeometryTypeId getGeometryTypeId() const;
+	void apply_ro(CoordinateFilter *filter) const;
+	void apply_rw(const CoordinateFilter *filter);
+	void apply_ro(GeometryFilter *filter) const;
+	void apply_rw(GeometryFilter *filter);
+	void apply_rw(GeometryComponentFilter *filter);
+	void apply_ro(GeometryComponentFilter *filter) const;
+	void apply_rw(CoordinateSequenceFilter& filter);
+	void apply_ro(CoordinateSequenceFilter& filter) const;
 
-	_export bool equalsExact(const Geometry *other, double tolerance=0) const;
+	bool equalsExact(const Geometry *other, double tolerance=0) const;
 
-	_export void normalize(void)
+	void normalize(void)
 	{
 		// a Point is always in normalized form
 	}
 
-  	_export Geometry* reverse() const
+  	Geometry* reverse() const
 	{
 		return clone();
 	}
@@ -140,13 +140,13 @@ protected:
 	 *
 	 * @param newFactory the GeometryFactory used to create this geometry
 	 */  
-	_export Point(CoordinateSequence *newCoords, const GeometryFactory *newFactory);
+	Point(CoordinateSequence *newCoords, const GeometryFactory *newFactory);
 
-	_export Point(const Point &p); 
+	Point(const Point &p); 
 
-	_export Envelope::AutoPtr computeEnvelopeInternal() const;
+	Envelope::AutoPtr computeEnvelopeInternal() const;
 
-	_export int compareToSameClass(const Geometry *p) const;
+	int compareToSameClass(const Geometry *p) const;
 
 private:
 

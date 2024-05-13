@@ -16,7 +16,7 @@
 
 #ifndef GEOS_ALGORITHM_LOCATE_SIMPLEPOINTINAREALOCATOR_H
 #define GEOS_ALGORITHM_LOCATE_SIMPLEPOINTINAREALOCATOR_H
-#include <geos/platform.h>
+
 #include <geos/algorithm/locate/PointOnGeometryLocator.h> // inherited
 
 // Forward declarations
@@ -50,24 +50,24 @@ class SimplePointInAreaLocator : public PointOnGeometryLocator
 
 public:
 
-	_export static int locate(const geom::Coordinate& p,
+	static int locate(const geom::Coordinate& p,
 			const geom::Geometry *geom);
 
-	_export static bool containsPointInPolygon(const geom::Coordinate& p,
+	static bool containsPointInPolygon(const geom::Coordinate& p,
 			const geom::Polygon *poly);
 
-	_export SimplePointInAreaLocator( const geom::Geometry * g) 
+	SimplePointInAreaLocator( const geom::Geometry * g) 
 	:	g( g)
 	{ }
 
-	_export int locate( const geom::Coordinate * p) 
+	int locate( const geom::Coordinate * p) 
 	{
 		return locate( *p, g);
 	}
 
 private:
 
-	_export static bool containsPoint(const geom::Coordinate& p,
+	static bool containsPoint(const geom::Coordinate& p,
 			const geom::Geometry *geom);
 
 	const geom::Geometry * g;

@@ -58,7 +58,7 @@ namespace geom { // geos::geom
  * will use your CoordinateSequence implementation.
  * 
  */
-class _export CoordinateSequence {
+class GEOS_DLL CoordinateSequence {
 
 protected:
 

@@ -43,7 +43,7 @@ namespace algorithm { // geos::algorithm
  * closest to the centroid.
  * </ul>
  */
-class _export InteriorPointLine {
+class GEOS_DLL InteriorPointLine {
 public:
 
 	InteriorPointLine(const geom::Geometry *g);

@@ -21,7 +21,7 @@
 #define GEOS_GEOM_GEOMETRYFACTORY_H
 
 //#include <geos/geom/CoordinateSequence.h>
-#include <geos/platform.h> 
+//#include <geos/geom/Geometry.h>
 #include <geos/export.h>
 #include <geos/inline.h>
 
@@ -60,7 +60,7 @@ namespace geom { // geos::geom
  * In particular, they are not rounded to the supplied <tt>PrecisionModel</tt>.
  * It is assumed that input Coordinates meet the given precision.
  */
-class _export GeometryFactory {
+class GEOS_DLL GeometryFactory {
 public:
 	/**
 	 * \brief 

@@ -53,7 +53,7 @@ struct CoordinateLessThen;
 // Define the following to make assignments and copy constructions 
 // NON-inline (will let profilers report usages)
 //#define PROFILE_COORDINATE_COPIES 1
-class _export Coordinate {
+class GEOS_DLL Coordinate {
 
 private:
 
@@ -137,13 +137,13 @@ struct GEOS_DLL CoordinateLessThen {
 };
 
 /// Output function
-_export std::ostream& operator<< (std::ostream& os, const Coordinate& c);
+GEOS_DLL std::ostream& operator<< (std::ostream& os, const Coordinate& c);
 
 /// Equality operator for Coordinate. 2D only.
-_export bool operator==(const Coordinate& a, const Coordinate& b);
+GEOS_DLL bool operator==(const Coordinate& a, const Coordinate& b);
 
 /// Inequality operator for Coordinate. 2D only.
-_export bool operator!=(const Coordinate& a, const Coordinate& b);
+GEOS_DLL bool operator!=(const Coordinate& a, const Coordinate& b);
 
 
 

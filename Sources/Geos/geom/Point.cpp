@@ -43,9 +43,9 @@ namespace geom { // geos::geom
 
 
 /*protected*/
-Point::Point(CoordinateSequence *newCoords, const GeometryFactory *fact)
+Point::Point(CoordinateSequence *newCoords, const GeometryFactory *factory)
 	:
-	Geometry(fact),
+	Geometry(factory),
 	coordinates(newCoords)
 {
 	if (coordinates.get()==NULL) {

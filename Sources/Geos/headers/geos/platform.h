@@ -58,7 +58,7 @@ extern "C"
 #define DoubleInfinity std::numeric_limits<double>::infinity()
 #define DoubleNegInfinity -std::numeric_limits<double>::infinity()
 
-#define DoubleMax 1e308
+#define DoubleMax std::numeric_limits<double>::max()
 
 inline bool
 isFinite(double d)
@@ -69,7 +69,7 @@ isFinite(double d)
     // Put using namespace std; here if you have to
     // put it anywhere.
     using namespace std;
-	return d != std::numeric_limits<double>::infinity();
+    return (isfinite(d));
 #endif
 }
 #define FINITE(x) ( isFinite(x) ) 
@@ -79,7 +79,7 @@ isFinite(double d)
 #else
 // Hack for OS/X <cmath> incorrectly re-defining isnan() into
 // oblivion. It does leave a version in std.
-#define ISNAN(x) ( _isnan(x) )
+#define ISNAN(x) ( std::isnan(x) )
 #endif
 
 #ifdef HAVE_INT64_T_64
@@ -95,8 +95,6 @@ isFinite(double d)
 #  endif
 # endif
 #endif
-
-#define _export __declspec(dllexport)
 
 inline int getMachineByteOrder() {
 	static int endian_check = 1; // don't modify !!

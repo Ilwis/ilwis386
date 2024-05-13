@@ -212,7 +212,7 @@ public:
 	 * @param distance the buffer distance
 	 * @return the buffer of the input geometry
 	 */
-	_export geom::Geometry* getResultGeometry(double nDistance);
+	geom::Geometry* getResultGeometry(double nDistance);
 
 };
 

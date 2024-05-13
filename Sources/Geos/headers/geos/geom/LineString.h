@@ -58,7 +58,7 @@ public:
 	/// A vector of const LineString pointers
 	typedef std::vector<const LineString *> ConstVect;
 
-	_export virtual ~LineString();
+	virtual ~LineString();
 
 	/**
 	 * Creates and returns a full copy of this {@link LineString} object.
@@ -68,76 +68,76 @@ public:
 	 */
 	virtual Geometry *clone() const;
 
-	_export virtual CoordinateSequence* getCoordinates() const;
+	virtual CoordinateSequence* getCoordinates() const;
 
 	/// Returns a read-only pointer to internal CoordinateSequence
-	_export const CoordinateSequence* getCoordinatesRO() const;
+	const CoordinateSequence* getCoordinatesRO() const;
 
-	_export virtual const Coordinate& getCoordinateN(int n) const;
+	virtual const Coordinate& getCoordinateN(int n) const;
 
 	/// Returns line dimension (1)
-	_export virtual Dimension::DimensionType getDimension() const;
+	virtual Dimension::DimensionType getDimension() const;
 
 	/**
 	 * \brief
 	 * Returns Dimension::False for a closed LineString,
 	 * 0 otherwise (LineString boundary is a MultiPoint)
 	 */
-	_export virtual int getBoundaryDimension() const;
+	virtual int getBoundaryDimension() const;
 
 	/**
 	 * \brief
 	 * Returns a MultiPoint.
 	 * Empty for closed LineString, a Point for each vertex otherwise.
 	 */
-	_export virtual Geometry* getBoundary() const;
+	virtual Geometry* getBoundary() const;
 
-	_export virtual bool isEmpty() const;
+	virtual bool isEmpty() const;
 
-	_export virtual size_t getNumPoints() const;
+	virtual size_t getNumPoints() const;
 
-	_export virtual Point* getPointN(size_t n) const;
+	virtual Point* getPointN(size_t n) const;
 
 	/// \brief
 	/// Return the start point of the LineString
 	/// or NULL if this is an EMPTY LineString.
 	///
-	_export virtual Point* getStartPoint() const;
+	virtual Point* getStartPoint() const;
 
 	/// \brief
 	/// Return the end point of the LineString
 	/// or NULL if this is an EMPTY LineString.
 	///
-	_export virtual Point* getEndPoint() const;
+	virtual Point* getEndPoint() const;
 
-	_export virtual bool isClosed() const;
+	virtual bool isClosed() const;
 
-	_export virtual bool isRing() const;
+	virtual bool isRing() const;
 
-	_export virtual std::string getGeometryType() const;
+	virtual std::string getGeometryType() const;
 
-	_export virtual GeometryTypeId getGeometryTypeId() const;
+	virtual GeometryTypeId getGeometryTypeId() const;
 
-	_export virtual bool isCoordinate(Coordinate& pt) const;
+	virtual bool isCoordinate(Coordinate& pt) const;
 
-	_export virtual bool equalsExact(const Geometry *other, double tolerance=0)
+	virtual bool equalsExact(const Geometry *other, double tolerance=0)
 		const;
 
-	_export virtual void apply_rw(const CoordinateFilter *filter);
+	virtual void apply_rw(const CoordinateFilter *filter);
 
-	_export virtual void apply_ro(CoordinateFilter *filter) const;
+	virtual void apply_ro(CoordinateFilter *filter) const;
 
-	_export virtual void apply_rw(GeometryFilter *filter);
+	virtual void apply_rw(GeometryFilter *filter);
 
-	_export virtual void apply_ro(GeometryFilter *filter) const;
+	virtual void apply_ro(GeometryFilter *filter) const;
 
-	_export virtual void apply_rw(GeometryComponentFilter *filter);
+	virtual void apply_rw(GeometryComponentFilter *filter);
 
-	_export virtual void apply_ro(GeometryComponentFilter *filter) const;
+	virtual void apply_ro(GeometryComponentFilter *filter) const;
 
-	_export void apply_rw(CoordinateSequenceFilter& filter);
+	void apply_rw(CoordinateSequenceFilter& filter);
 
-	_export void apply_ro(CoordinateSequenceFilter& filter) const;
+	void apply_ro(CoordinateSequenceFilter& filter) const;
 
 	/** \brief
 	 * Normalizes a LineString. 
@@ -146,14 +146,14 @@ public:
 	 * has the first point which is not equal to it's reflected point
 	 * less than the reflected point.
 	 */
-	_export virtual void normalize();
+	virtual void normalize();
 
 	//was protected
-	_export virtual int compareToSameClass(const Geometry *ls) const;
+	virtual int compareToSameClass(const Geometry *ls) const;
 
-	_export virtual const Coordinate* getCoordinate() const;
+	virtual const Coordinate* getCoordinate() const;
 
-	_export virtual double getLength() const;
+	virtual double getLength() const;
 
 	/**
 	 * Creates a LineString whose coordinates are in the reverse
@@ -161,24 +161,22 @@ public:
 	 *
 	 * @return a LineString with coordinates in the reverse order
 	 */
-  	_export Geometry* reverse() const;
-
-	_export bool isSimple() const { return Geometry::isSimple(); }
+  	Geometry* reverse() const;
 
 protected:
 
-	_export LineString(const LineString &ls);
+	LineString(const LineString &ls);
 
 	/// \brief
 	/// Constructs a LineString taking ownership the
 	/// given CoordinateSequence.
-	_export LineString(CoordinateSequence *pts, const GeometryFactory *newFactory);
+	LineString(CoordinateSequence *pts, const GeometryFactory *newFactory);
 
 	/// Hopefully cleaner version of the above
-	_export LineString(CoordinateSequence::AutoPtr pts,
+	LineString(CoordinateSequence::AutoPtr pts,
 			const GeometryFactory *newFactory);
 
-	_export Envelope::AutoPtr computeEnvelopeInternal() const;
+	Envelope::AutoPtr computeEnvelopeInternal() const;
 
 	CoordinateSequence::AutoPtr points;
 

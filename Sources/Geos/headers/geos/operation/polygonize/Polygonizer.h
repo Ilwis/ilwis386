@@ -22,7 +22,6 @@
 #ifndef GEOS_OP_POLYGONIZE_POLYGONIZER_H
 #define GEOS_OP_POLYGONIZE_POLYGONIZER_H
 
-#include <geos/platform.h>
 #include <geos/export.h>
 
 #include <geos/geom/GeometryComponentFilter.h> // for LineStringAdder inheritance
@@ -68,7 +67,7 @@ namespace polygonize { // geos::operation::polygonize
  *   (e.g. the component lines contain a self-intersection)
  *
  */
-class _export Polygonizer {
+class GEOS_DLL Polygonizer {
 private:
 	/**
 	 * Add every linear element in a geometry into the polygonizer graph.

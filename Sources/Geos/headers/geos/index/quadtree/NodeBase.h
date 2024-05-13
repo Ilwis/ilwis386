@@ -20,7 +20,6 @@
 #ifndef GEOS_IDX_QUADTREE_NODEBASE_H
 #define GEOS_IDX_QUADTREE_NODEBASE_H
 
-#include <geos/platform.h>
 #include <geos/export.h>
 #include <vector>
 #include <string>
@@ -57,34 +56,34 @@ private:
 	
 public:
 
-	_export static int getSubnodeIndex(const geom::Envelope *env,
+	static int getSubnodeIndex(const geom::Envelope *env,
 			const geom::Coordinate& centre);
 
-	_export  NodeBase();
+	NodeBase();
 
-	_export  virtual ~NodeBase();
+	virtual ~NodeBase();
 
-	_export  std::vector<void*>& getItems();
+	std::vector<void*>& getItems();
 
 	/// Add an item to this node.
 	/// Ownership of the item is left to caller.
-	_export  void add(void* item);
+	void add(void* item);
 
 	/// Push all node items to the given vector, return the argument
-	_export  std::vector<void*>& addAllItems(std::vector<void*>& resultItems) const;
+	std::vector<void*>& addAllItems(std::vector<void*>& resultItems) const;
 
-	_export  virtual void addAllItemsFromOverlapping(const geom::Envelope& searchEnv,
+	virtual void addAllItemsFromOverlapping(const geom::Envelope& searchEnv,
 			std::vector<void*>& resultItems) const;
 
-	_export unsigned int depth() const;
+	unsigned int depth() const;
 
-	_export unsigned int size() const;
+	unsigned int size() const;
 
-	_export unsigned int getNodeCount() const;
+	unsigned int getNodeCount() const;
 
-	_export virtual std::string toString() const;
+	virtual std::string toString() const;
 
-	_export virtual void visit(const geom::Envelope* searchEnv, ItemVisitor& visitor);
+	virtual void visit(const geom::Envelope* searchEnv, ItemVisitor& visitor);
 
 	/**
 	 * Removes a single item from this subtree.
@@ -93,13 +92,13 @@ public:
 	 * @param item the item to remove
 	 * @return <code>true</code> if the item was found and removed
 	 */
-	_export bool remove(const geom::Envelope* itemEnv, void* item);
+	bool remove(const geom::Envelope* itemEnv, void* item);
  
-	_export bool hasItems() const;
+	bool hasItems() const;
 
-	_export bool hasChildren() const;
+	bool hasChildren() const;
 
-	_export bool isPrunable() const;
+	bool isPrunable() const;
 
 protected:
 

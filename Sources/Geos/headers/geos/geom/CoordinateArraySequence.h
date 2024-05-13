@@ -39,41 +39,41 @@ namespace geom { // geos.geom
 class GEOS_DLL CoordinateArraySequence : public CoordinateSequence {
 public:
 
-	_export CoordinateArraySequence(const CoordinateArraySequence &cl);
+	CoordinateArraySequence(const CoordinateArraySequence &cl);
 
-	_export CoordinateSequence *clone() const;
+	CoordinateSequence *clone() const;
 
 	//const Coordinate& getCoordinate(int pos) const;
-	_export const Coordinate& getAt(size_t pos) const;
+	const Coordinate& getAt(size_t pos) const;
 
 	/// Copy Coordinate at position i to Coordinate c
-	_export virtual void getAt(size_t i, Coordinate& c) const;
+	virtual void getAt(size_t i, Coordinate& c) const;
 
 	//int size() const;
-	_export size_t getSize() const;
+	size_t getSize() const;
 
 	// @deprecated
-	_export const std::vector<Coordinate>* toVector() const;
+	const std::vector<Coordinate>* toVector() const;
 
 	// See dox in CoordinateSequence.h
-	_export void toVector(std::vector<Coordinate>&) const;
+	void toVector(std::vector<Coordinate>&) const;
 
 	/// Construct an empty sequence
-	_export CoordinateArraySequence();
+	CoordinateArraySequence();
 
 	/// Construct sequence taking ownership of given Coordinate vector
-	_export CoordinateArraySequence(std::vector<Coordinate> *coords);
+	CoordinateArraySequence(std::vector<Coordinate> *coords);
 
 	/// Construct sequence allocating space for n coordinates
-	_export CoordinateArraySequence(size_t n);
+	CoordinateArraySequence(size_t n);
 
-	_export ~CoordinateArraySequence();
+	~CoordinateArraySequence();
 
-	_export bool isEmpty() const;
+	bool isEmpty() const;
 
-	_export void add(const Coordinate& c);
+	void add(const Coordinate& c);
 
-	_export virtual void add(const Coordinate& c, bool allowRepeated);
+	virtual void add(const Coordinate& c, bool allowRepeated);
 
 	/** \brief
 	 * Inserts the specified coordinate at the specified position in
@@ -86,31 +86,31 @@ public:
 	 *
 	 * NOTE: this is a CoordinateList interface in JTS
 	 */
-	_export virtual void add(size_t i, const Coordinate& coord, bool allowRepeated);
+	virtual void add(size_t i, const Coordinate& coord, bool allowRepeated);
 
-	_export void setAt(const Coordinate& c, size_t pos);
+	void setAt(const Coordinate& c, size_t pos);
 
-	_export void deleteAt(size_t pos);
+	void deleteAt(size_t pos);
 
-	_export std::string toString() const;
+	std::string toString() const;
 
-	_export void setPoints(const std::vector<Coordinate> &v);
+	void setPoints(const std::vector<Coordinate> &v);
 
-	_export double getOrdinate(size_t index,
+	double getOrdinate(size_t index,
 			size_t ordinateIndex) const;
 
-	_export void setOrdinate(size_t index, size_t ordinateIndex,
+	void setOrdinate(size_t index, size_t ordinateIndex,
 			double value);
 
-	_export void expandEnvelope(Envelope &env) const;
+	void expandEnvelope(Envelope &env) const;
 
-	_export size_t getDimension() const { return 3; }
+	size_t getDimension() const { return 3; }
 
-	_export void apply_rw(const CoordinateFilter *filter); 
+	void apply_rw(const CoordinateFilter *filter); 
 
-	_export void apply_ro(CoordinateFilter *filter) const; 
+	void apply_ro(CoordinateFilter *filter) const; 
 
-	_export virtual CoordinateSequence& removeRepeatedPoints();
+	virtual CoordinateSequence& removeRepeatedPoints();
 
 private:
 	std::vector<Coordinate> *vect;

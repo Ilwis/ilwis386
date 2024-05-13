@@ -49,32 +49,30 @@ public:
 
 	friend class GeometryFactory;
 
-	_export virtual ~MultiLineString();
+	virtual ~MultiLineString();
 
 	/// Returns line dimension (1)
-	_export Dimension::DimensionType getDimension() const;
+	Dimension::DimensionType getDimension() const;
 
 	/**
 	 * \brief
 	 * Returns Dimension::False if all LineStrings in the collection
 	 * are closed, 0 otherwise.
 	 */
-	_export int getBoundaryDimension() const;
+	int getBoundaryDimension() const;
 
 	/// Returns a (possibly empty) MultiPoint 
-	_export Geometry* getBoundary() const;
+	Geometry* getBoundary() const;
 
-	_export std::string getGeometryType() const;
+	std::string getGeometryType() const;
 
-	_export virtual GeometryTypeId getGeometryTypeId() const;
+	virtual GeometryTypeId getGeometryTypeId() const;
 
-	_export bool isClosed() const;
+	bool isClosed() const;
 
-	_export bool equalsExact(const Geometry *other, double tolerance=0) const;
+	bool equalsExact(const Geometry *other, double tolerance=0) const;
 
-	_export Geometry *clone() const;
-
-	_export bool isSimple() const { return Geometry::isSimple(); }
+	Geometry *clone() const;
 
 	/**
 	 * Creates a MultiLineString in the reverse
@@ -85,7 +83,7 @@ public:
 	 *
 	 * @return a MultiLineString in the reverse order
 	 */
-	_export MultiLineString* reverse() const;
+	MultiLineString* reverse() const;
 
 protected:
 
@@ -108,10 +106,10 @@ protected:
 	 *	of the constructed MultiLineString.
 	 * 	
 	 */
-	_export MultiLineString(std::vector<Geometry *> *newLines,
+	MultiLineString(std::vector<Geometry *> *newLines,
 			const GeometryFactory *newFactory);
 
-	_export MultiLineString(const MultiLineString &mp);
+	MultiLineString(const MultiLineString &mp);
 };
 
 } // namespace geos::geom

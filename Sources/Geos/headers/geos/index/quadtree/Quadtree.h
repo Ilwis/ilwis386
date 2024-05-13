@@ -20,7 +20,6 @@
 #ifndef GEOS_IDX_QUADTREE_QUADTREE_H
 #define GEOS_IDX_QUADTREE_QUADTREE_H
 
-#include <geos/platform.h>
 #include <geos/export.h>
 #include <geos/index/SpatialIndex.h> // for inheritance
 #include <geos/index/quadtree/Root.h> // for composition
@@ -104,21 +103,21 @@ public:
 	 * \brief
 	 * Constructs a Quadtree with zero items.
 	 */
-	_export Quadtree()
+	Quadtree()
 		:
 		root(),
 		minExtent(1.0)
 	{}
 
-	_export ~Quadtree();
+	~Quadtree();
 
 	/// Returns the number of levels in the tree.
-	_export int depth();
+	int depth();
 
 	/// Returns the number of items in the tree.
-	_export int size();
+	int size();
 	
-	_export void insert(const geom::Envelope *itemEnv, void *item);
+	void insert(const geom::Envelope *itemEnv, void *item);
 
 	/** \brief
 	 * Queries the tree and returns items which may lie
@@ -137,7 +136,7 @@ public:
 	 * @param ret a vector where items which may intersect the
 	 * 	      search envelope are pushed
 	 */
-	_export void query(const geom::Envelope *searchEnv, std::vector<void*>& ret);
+	void query(const geom::Envelope *searchEnv, std::vector<void*>& ret);
 
 
 	/** \brief
@@ -156,7 +155,7 @@ public:
 	 * @param searchEnv the envelope of the desired query area.
 	 * @param visitor a visitor object which is passed the visited items
 	 */
-	_export void query(const geom::Envelope *searchEnv, ItemVisitor& visitor)
+	void query(const geom::Envelope *searchEnv, ItemVisitor& visitor)
 	{
 		/*
 		 * the items that are matched are the items in quads which
@@ -172,12 +171,12 @@ public:
 	 * @param item the item to remove
 	 * @return <code>true</code> if the item was found (and thus removed)
 	 */
-	_export bool remove(const geom::Envelope* itemEnv, void* item);
+	bool remove(const geom::Envelope* itemEnv, void* item);
 
 	/// Return a list of all items in the Quadtree
-	_export std::vector<void*>* queryAll();
+	std::vector<void*>* queryAll();
 
-	_export std::string toString() const;
+	std::string toString() const;
 
 };
 
