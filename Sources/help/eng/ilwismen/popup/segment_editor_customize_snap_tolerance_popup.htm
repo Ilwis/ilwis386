@@ -1,0 +1,28 @@
+<html>
+
+<head>
+<title>Segment editor Customize snap tolerance popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Snap tolerance</p>
+
+<p>The snap tolerance is a distance which determines whether the beginning or the end of a new segment can be snapped: </p>
+
+<ul>
+
+<li>to an existing node, or </li>
+
+<li>to an existing segment which then will be split in the process. </li>
+
+</ul>
+
+<p class=linespacing03before>Snap/split will only be allowed if the distance between the beginning or end coordinate of a new segment and the coordinate of an existing node or any segment to which you want to connect is <i>smaller</i> than the specified snap tolerance. </p>
+
+<p class=linespacing03before>When working with a <i>digitizer</i>, a snap tolerance in meters is used; the snap/split distance is then independent from any zooming. The default snap tolerance (in meters) is calculated as: the largest coordinate range, i.e. Xmax-Xmin or Ymax-Ymin as defined by the map's boundaries, divided by 150. </p>
+
+<p class=linespacing03before>When working with the <i>mouse</i>, a snap tolerance in screen pixels is used; the snap/split distance then varies with zooming. The default snap tolerance (in pixels) is 5. </p>
+
+</body

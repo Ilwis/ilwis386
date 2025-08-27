@@ -1,0 +1,40 @@
+<html>
+
+<head>
+<title>Segment editor Customize tunnel tolerance popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Tunnel tolerance</p>
+
+<p>During the insertion of new segments and when moving points within the segment editor, automatic tunnelling is performed. Tunnelling is meant to reduce the number of stored intermediate points (data reduction). Tunnelling is especially effective when you enter new segments while keeping the left mouse button or the digitizer cursor down (stream mode).</p>
+
+<p class=linespacing03before>The tunnel tolerance determines the width of the tunnels; see Figure 1 for an explanation of the tunnelling process.</p>
+
+<P class=emptylinehalf>&nbsp;</p>
+
+<p class=linespacing01before><img src="../../images/tun1.gif" align=bottom width="290" height="209"></p>
+
+<p class=captionfig>Fig. 1: Tunnelling: The first tunnel is constructed around node 1, and intermediate coordinates 2 and 3. Intermediate coordinate 2 falls outside the tunnel and thus remains. The second tunnel is constructed around intermediate coordinates 2, 3, and 4. Intermediate coordinate 3 falls inside the tunnel and is thus omitted. Now that point 3 is omitted, the next tunnel will be constructed around intermediate coordinates 4, 5, and 6 (point 6 is not in this picture).</p>
+
+<p>In the segment editor, the <i>default</i> tunnel tolerance is calculated as the largest coordinate range, i.e. Xmax-Xmin or Ymax-Ymin as defined by the map's <a href="../../ilwis/popup/coordinate_boundary_popup.htm">coordinate boundaries</a>, divided by 1500. Optionally, you can specify the tunnel tolerance yourself in the <a href="..//ilwismen/segment_editor_customize.htm" onClick="return popup(this, 'notes')" >Customize</a> dialog box of the segment editor (<a href="..//ilwis/segment_editor_menu_commands.htm" onClick="return popup(this, 'notes')" >File menu</a>). </p>
+
+</body

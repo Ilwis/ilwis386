@@ -1,0 +1,36 @@
+<html>
+
+<head>
+<title>table_select_all_popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Select All</p>
+
+<p>Selects the whole table. This includes column names, record names and all fields in the table. </p>
+
+<p class=defnewpar>After selecting an entire table, you may for instance <a href="..//ilwismen/copy_table_selection_to_clipboard.htm" onClick="return popup(this, 'notes')" >copy</a> it to the clipboard.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>To clear a selection, press <span class=arial>Esc</span> on the keyboard, or first click a field which already contains a value, and then press <span class=arial>Esc</span> on the keyboard.</p>
+
+</body

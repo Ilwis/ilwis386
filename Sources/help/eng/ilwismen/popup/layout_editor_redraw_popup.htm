@@ -1,0 +1,34 @@
+<html>
+
+<head>
+<title>layout editor redraw popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Redraw</p>
+
+<p>Redraw the entire <a href="../../ilwis/popup/objects_layout_popup.htm">layout</a> or redraw the currently selected <a href="../../ilwis/popup/objects_map_view_popup.htm">map view</a> in this layout. </p>
+
+<p class=linespacing03before>You must use this command when you added or removed layers to or from a map view in this layout, or when you changed display options of layers in a map view in this layout. 
+
+<p class=defnewpar>You can also redraw the layout by clicking the <span class=arial>Redraw</span> button <img src="../../images/redraw.gif" align=bottom width="22" height="22"> in the <a href="..//ilwis/layout_editor_standard_toolbar.htm" onClick="return popup(this, 'notes')" >standard toolbar</a> or by pressing <span class=arial>Ctrl+R</span> on the keyboard.</p>
+
+</body
