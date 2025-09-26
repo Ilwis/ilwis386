@@ -80,7 +80,6 @@ XY ProjectionEqualEarth::xyConv(const PhiLam& pl) const
 	xy.y = l * (A1 + A2 * l2 + l6 * (A3 + A4 * l2));
 
 	if (!ell.fSpherical()) {
-		/* Adjust x and y for authalic radius */
 		xy.x *= rqda;
 		xy.y *= rqda;
 	}
@@ -94,14 +93,7 @@ PhiLam ProjectionEqualEarth::plConv(const XY& _xy) const
 
 	XY xy = _xy;
 
-	// Is this the same as xy.x /= rqda?
-	
-	//xy.x = xy.x / k0;
-	//xy.y = xy.y / k0;
-
-
 	if (!ell.fSpherical()) {
-		/* Adjust x and y for authalic radius */
 		xy.x /= rqda;
 		xy.y /= rqda;
 	}
@@ -123,11 +115,6 @@ PhiLam ProjectionEqualEarth::plConv(const XY& _xy) const
 	pl.Lam = M * xy.x * (A1 + 3.0 * A2 * l2 + l6 * (7.0 * A3 + 9.0 * A4 * l2)) / cos(l);
 	pl.Phi = asin(sin(l) / M);
 
-	/* Ellipsoidal case, convert authalic latitude */
-    //if (!ell.fSpherical())
-	//	pl.Phi = pj_authalic_lat_inverse(pl.Phi, Q->apa, P, Q->qp);
-
-    //if (abs(ab) > 1 - EPS10) return pl;
 	if (!ell.fSpherical())
 		pl.Phi = authlat(pl.Phi, apa);
 
