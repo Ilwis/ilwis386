@@ -364,7 +364,7 @@ bool PolygonMapFromRas::fFreezing()
 		} while (iTopCurr != iTopStart);
 	}
 	trq.SetText(SPOLTextLinkIslands);
-	for (i=1; i<=afBwl.iSize(); ++i) {
+	for (i=1; i<afBwl.iSize(); ++i) {
 		if (trq.fUpdate(i, afBwl.iSize()))
 			return false;
 		if (!afBwl[i]) {
@@ -658,7 +658,7 @@ void PolygonMapFromRas::AppendLeftUp(long iLine, long iCol)
         sbUp->fEndSeg = sbLeft->fEndSeg;
         if (sbUp->fEndSeg) {
           aiFwl[sbUp->iSegNr] = aiFwl[sbLeft->iSegNr];
-          for (unsigned long i=1; i<=aiBwl.iSize(); ++i) {
+          for (unsigned long i=1; i<aiBwl.iSize(); ++i) {
             if (aiBwl[i] == -sbLeft->iSegNr)
               aiBwl[i] = -sbUp->iSegNr;
             else if (aiBwl[i] == sbLeft->iSegNr)
@@ -690,7 +690,7 @@ void PolygonMapFromRas::AppendLeftUp(long iLine, long iCol)
           sbUp->fBeginSeg = sbLeft->fBeginSeg;
           if (sbUp->fBeginSeg) {
             aiBwl[sbUp->iSegNr] = aiBwl[sbLeft->iSegNr];
-            for (unsigned long i=1; i<=aiFwl.iSize(); ++i) {
+            for (unsigned long i=1; i<aiFwl.iSize(); ++i) {
               if (aiFwl[i] == sbLeft->iSegNr)
                 aiFwl[i] = sbUp->iSegNr;
               else if (aiFwl[i] == -sbLeft->iSegNr)
