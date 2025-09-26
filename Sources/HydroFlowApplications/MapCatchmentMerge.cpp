@@ -701,8 +701,7 @@ bool MapCatchmentMerge::fFreezing()
 		//---put stream id, defined by the joint outlet location in the catchment, if it is a no-flow stream
 		if((m_UseOutlets && ol.isOnNode != true) || (!m_UseOutlets)) 
 			m_vStreamsInCatchment.push_back(m_vStreamMap[rc.Row][rc.Col]);
-		vector<long> vUpstreamID;
-		MergeCatchment(rc.Row, rc.Col, id, false, rc, vUpstreamID);
+		MergeCatchment(rc.Row, rc.Col, id, false);
 		UpdateUpLinkCatchment(id);
 		UpdateDownLinkCatchment(id);		
 		UpdateLink2StreamSegments(id, ol);
@@ -935,7 +934,7 @@ bool MapCatchmentMerge::fRelocatOutlet(RowCol& rc, int iSize)
   }
   return false;
 }
-long MapCatchmentMerge::MergeCatchment(long iRow, long iCol, long iFlag, boolean fExtractOriginalOrder, RowCol rcUpCoord, vector<long> UpstreamID)
+long MapCatchmentMerge::MergeCatchment(long iRow, long iCol, const long iFlag, const bool fExtractOriginalOrder)
 {
 	//****Merge sub-catchments and assigned id iFlag to the merged catchment 
 	//For the specified outlet cell in loaction rc, 
@@ -960,102 +959,14 @@ long MapCatchmentMerge::MergeCatchment(long iRow, long iCol, long iFlag, boolean
 	
 	long iFlow = 1;
 	if (IsEdgeCell(iRow, iCol)) return iFlow;
-	bool isFlow; //determine if the neighboring cell flows to the cell in location rc 
-	long in, jn;  
 	for (int iNr = 1; iNr < 9; iNr++)
 	{
-		isFlow = false;
-		switch (iNr)
-		{
-				case 1: {	//East
-					if (iCol != iCols()-1)
-					{	
-						in = iRow;
-						jn = iCol+1;
-						isFlow = ((m_vFlowDir[in][jn] == 5) && (m_vOutput[in][jn] == iUNDEF));
-						BuildUpLinkCatchment(in, jn, 5, iFlag);	
-					}
-				}
-				break;
-				case 2: { //South East 
-					if (iCol != iCols()-1 && iRow != iLines()-1)
-					{
-						in = iRow+1;
-						jn = iCol+1;
-						isFlow = ((m_vFlowDir[in][jn] == 6) && (m_vOutput[in][jn] == iUNDEF));
-						BuildUpLinkCatchment(in, jn, 6, iFlag);	
-					}
-				}
-				break;
-				case 3: {	//South
-					if (iRow != iLines()-1)
-					{
-						in = iRow+1;
-						jn = iCol;
-						isFlow = ((m_vFlowDir[in][jn] == 7) && (m_vOutput[in][jn] == iUNDEF));
-						BuildUpLinkCatchment(in, jn, 7, iFlag);	
-					}
-				}
-				break;
-				case 4:{ //South West
-					if (iCol != 0 && iRow != iLines()-1)
-					{
-						in = iRow+1;
-						jn = iCol-1;
-						isFlow = ((m_vFlowDir[in][jn] == 8) && (m_vOutput[in][jn] == iUNDEF));
-						BuildUpLinkCatchment(in, jn, 8, iFlag);	
-					}
-				}
-				break;
-				case 5:{	//West
-					if (iCol != 0 )
-					{
-						in = iRow;
-						jn = iCol-1;
-						isFlow = ((m_vFlowDir[in][jn] == 1) && (m_vOutput[in][jn] == iUNDEF));
-						BuildUpLinkCatchment(in, jn, 1, iFlag);	
-					}
-				}
-				break;
-				case 6:{	//North West 
-					if (iCol != 0 && iRow != 0)
-					{
-						in = iRow-1;
-						jn = iCol-1;
-						isFlow = ((m_vFlowDir[in][jn] == 2) && (m_vOutput[in][jn] == iUNDEF));
-						BuildUpLinkCatchment(in, jn, 2, iFlag);	
-					}	
-				}
-				break;
-				case 7:{	//North
-					if (iRow != 0)
-					{
-						in = iRow-1;
-						jn = iCol;
-						isFlow = ((m_vFlowDir[in][jn] == 3) && (m_vOutput[in][jn] == iUNDEF));
-						BuildUpLinkCatchment(in, jn, 3, iFlag);	
-					}
-				}
-				break;
-				case 8:{	//North East
-					if (iCol != iCols()-1 && iRow != 0)
-					{
-						in = iRow-1;
-						jn = iCol+1;
-						isFlow = ((m_vFlowDir[in][jn] == 4) && (m_vOutput[in][jn] == iUNDEF));
-						BuildUpLinkCatchment(in, jn, 4, iFlag);	
-					}
-				}
-				break;
-		}
-		if (isFlow)
-		{
-			long un = m_vStreamMap[in][jn] ;
-			if(!fExtractOriginalOrder)
-				iFlow += MergeCatchment(in, jn, iFlag, fExtractOriginalOrder, rcUpCoord, UpstreamID);
-			else if ((m_vStreamMap[in][jn] == -2 || m_vStreamMap[in][jn] == m_iOutletVal))
-				iFlow += MergeCatchment(in, jn, iFlag, fExtractOriginalOrder, rcUpCoord, UpstreamID);
-		}
+		long in = iRow + ((iNr >= 2 && iNr <= 4) ? 1 : ((iNr >=6 && iNr <=8) ? -1 : 0));
+		long jn = iCol + ((iNr == 1 || iNr == 2 || iNr == 8) ? 1 : ((iNr >= 4 && iNr <= 6) ? -1 : 0));
+		bool isFlow = ((m_vFlowDir[in][jn] == (1 + (iNr + 3) % 8)) && (m_vOutput[in][jn] == iUNDEF)); //determine if the neighboring cell flows to the cell in location rc
+		BuildUpLinkCatchment(in, jn, 1 + (iNr + 3) % 8, iFlag);
+		if (isFlow && (!fExtractOriginalOrder || (m_vStreamMap[in][jn] == -2 || m_vStreamMap[in][jn] == m_iOutletVal)))
+			iFlow += MergeCatchment(in, jn, iFlag, fExtractOriginalOrder);
 		m_vOutput[iRow][iCol] = iFlag;
 		//Identify streams in the merged catchment and put stream IDs into m_vStreamsInCatchment
 		if(!fExtractOriginalOrder)
@@ -1983,7 +1894,7 @@ void MapCatchmentMerge::Merge(long id, DrainageAtt datt, bool fExtractOriginalOr
     //m_vStreamsInCatchment.push_back(m_vStreamMap[rc2.Row][rc2.Col]);
 	m_vStreamsInCatchment.push_back(datt.ID);
 	m_iOutletVal = datt.ID; //m_vStreamMap[rc2.Row][rc2.Col];
-	MergeCatchment(rc2.Row, rc2.Col, id, fExtractOriginalOrder, datt.UpstreamCoord, datt.UpstreamID);
+	MergeCatchment(rc2.Row, rc2.Col, id, fExtractOriginalOrder);
 	UpdateUpLinkCatchment(id);
 	UpdateDownLinkCatchment(id);	
     OutletLocation ol;

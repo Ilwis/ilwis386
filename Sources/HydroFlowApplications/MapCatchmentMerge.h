@@ -194,7 +194,7 @@ private:
 	bool IsEdgeCell(long iRow, long iCol);
 	void CompitableGeorefs(FileName fn, Map mp1, Map mp2);
 	void AddDomainItem(Domain dm,long item);
-	long MergeCatchment(long iRow, long iCol, long iFlag, boolean fExtractOriginal, RowCol, vector<long> UpstreamID);
+	long MergeCatchment(long iRow, long iCol, const long iFlag, const bool fExtractOriginal);
 	void AddLink2StreamSegments();
 	void UpdateLink2StreamSegments(long iCatchmentID, OutletLocation ol);
 	void CreateTable();
