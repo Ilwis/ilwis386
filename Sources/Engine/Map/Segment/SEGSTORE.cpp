@@ -191,6 +191,7 @@ void SegmentMapStore::Store()
 		Domain dmcrd;
 		Domain dmcrdbuf("CoordBuf");
 		dmcrd.SetPointer(new DomainCoord(ptr.cs()->fnObj));
+		dmcrd->pdcrd()->set3D(ptr.use3DCoordinates());
 
 		Column colMinCoords = tblSegment->colNew("MinCoords", dmcrd, ValueRange());
 		Column colMaxCoords = tblSegment->colNew("MaxCoords", dmcrd, ValueRange());
