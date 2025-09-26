@@ -66,8 +66,8 @@ protected:
   virtual bool fValueRangeChangeable() const;
 private:
   void Init();
-  bool fForwardDistances(long& iChanges, bool fFirstPass);
-  bool fBackwardDistances(long& iChanges);
+  bool fForwardDistances(ULONGLONG& iChanges, bool fFirstPass);
+  bool fBackwardDistances(ULONGLONG& iChanges);
   bool fCorrectDistances();
   File *filTemp;
   LongBuf iCurrDist;

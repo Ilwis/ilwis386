@@ -205,7 +205,7 @@ bool MapDistance::fFreezing()
   iCurrSource.Size(iCols());
   iPrevSource.Size(iCols());
 
-  long iChanges;
+  ULONGLONG iChanges;
   bool fFirstPass = true;
   bool fStop;
   do {
@@ -250,9 +250,11 @@ String MapDistance::sExpression() const
                 sMapThiessen);
 }
 
-bool MapDistance::fForwardDistances(long& iChanges, bool fFirstPass)
+bool MapDistance::fForwardDistances(ULONGLONG& iChanges, bool fFirstPass)
 {
-	long iCurLine, iCurCol, iMinSource, iLineChanges, iWeight;
+	long iCurLine, iCurCol, iMinSource;
+	ULONGLONG iLineChanges;
+	long iWeight;
 	long iMinDist, iDist, iW1, iW2;
 	ULONGLONG iStart;
 	long iColumns = iCols();
@@ -277,7 +279,7 @@ bool MapDistance::fForwardDistances(long& iChanges, bool fFirstPass)
 	{
 		if (iLineChanges != 0)
 		{
-			String s = String(TR("Changes forward %li. Line").c_str(), iChanges);
+			String s = String(TR("Changes forward %llu / line").c_str(), iLineChanges);
 			trq.UpdateText(s);
 		}
 		if (trq.fUpdate(iCurLine, iLines()))
@@ -443,9 +445,11 @@ bool MapDistance::fForwardDistances(long& iChanges, bool fFirstPass)
 	return true;
 }
 
-bool MapDistance::fBackwardDistances(long& iChanges)
+bool MapDistance::fBackwardDistances(ULONGLONG& iChanges)
 {
-  long iCurLine, iCurCol, iMinSource, iLineChanges, iWeight;
+  long iCurLine, iCurCol, iMinSource;
+  ULONGLONG iLineChanges;
+  long iWeight;
 //  int iCols = mpWeight->iCols();
 //  int iLines = mpWeight->iLines();
 //  bool fComplex = Mp.fComplex;
@@ -472,7 +476,7 @@ bool MapDistance::fBackwardDistances(long& iChanges)
   trq.fUpdate(iChanges); 
   for (iCurLine = iLines() - 1; iCurLine >= 0; iCurLine--) {
     if (iLineChanges != 0) {
-      String s = String(TR("Changes backward %li. Line").c_str(), iChanges);
+      String s = String(TR("Changes backward %llu / line").c_str(), iLineChanges);
       trq.UpdateText(s);
     }
     if (trq.fUpdate(iCurLine, iLines()))
