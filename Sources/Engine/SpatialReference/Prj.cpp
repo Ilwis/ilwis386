@@ -55,6 +55,7 @@
 #include "Engine\SpatialReference\ECKERT2.H"
 #include "Engine\SpatialReference\ECKERT3.H"
 #include "Engine\SpatialReference\EQDCON.H"
+#include "Engine\SpatialReference\EqualEarth.h"
 #include "Engine\SpatialReference\EOV_Hungary.h"
 #include "Engine\SpatialReference\CONIC.H"
 #include "Engine\SpatialReference\CC.H"
@@ -191,8 +192,10 @@ ProjectionPtr* ProjectionPtr::create(const String& sName, const Ellipsoid& ell)
     ptr = new ProjectionEckert2();
   else if (_stricmp("Eckert3", sName.c_str()) == 0)
     ptr = new ProjectionEckert3();
-	else if (_stricmp("EOV Hungary", sName.c_str()) == 0)
+  else if (_stricmp("EOV Hungary", sName.c_str()) == 0)
     ptr = new ProjectionEOVHungary(ell);
+  else if (_stricmp("Equal Earth", sName.c_str()) == 0)
+    ptr = new ProjectionEqualEarth(ell);
   else if (_stricmp("Equidistant Conic", sName.c_str()) == 0)
     ptr = new ProjectionEquiDistConic(ell);
   else if (_stricmp("Gauss-Boaga Italy", sName.c_str()) == 0)
