@@ -273,9 +273,9 @@ bool MapAreaNumbering::fFreezing()
 				iTempArn = iUNDEF;
 			for (i = iLastColPlus1 - iCount; i < iLastColPlus1; i++)
 				iArnLine[i] = iTempArn;
-
 			filTemp.Write(iCols()*sizeof(long), iArnLine.buf());
-			//    ptr->PutLineRaw(l, iArnLine);
+
+			//		ptr->PutLineRaw(l, iArnLine);
 			if (!(l % 5))
 				if (trq.fUpdate(l, iLines())) return false;
 
@@ -538,7 +538,7 @@ long MapAreaNumbering::iAreaNumber (double rValue, long& iArn, long iLastColPlus
     iEnd++;
   iTempArn = 0;
   j = iSta;
-  if (fUseForPolFromRas) {
+  if (fUseForPolFromRas && f8Connected) {
     if (rValue == rPrevLine[j - 1]) { // check pixel to upper left
       iTempArn = iPrevArnLine[j - 1];
         if ((rCurrLine[j - 1] == rPrevLine[j]) && (rPrevLine[j] > rValue))
